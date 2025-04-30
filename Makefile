@@ -65,11 +65,15 @@ goimports:
 verify:
 	$(GOMOD) verify
 
+run:
+	$(GOCMD) run $(MAIN_PACKAGE)
+
 # Show help
 help:
 	@echo "Make targets:"
 	@echo "  all          - Run tests and build"
 	@echo "  build        - Build the binary"
+	@echo "  run          - Run the application"
 	@echo "  test         - Run tests"
 	@echo "  test-coverage - Run tests with coverage report"
 	@echo "  clean        - Clean build artifacts"
