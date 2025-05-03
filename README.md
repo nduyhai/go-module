@@ -1,6 +1,6 @@
 # go-module
 
-[![Go](https://img.shields.io/badge/go-1.21+-blue)](https://go.dev/)
+[![Go](https://img.shields.io/badge/go-1.24+-blue)](https://go.dev/)
 [![License](https://img.shields.io/github/license/nduyhai/go-module)](LICENSE)
 
 A GitHub template repository for bootstrapping a new Go project with a clean, idiomatic layout.
