@@ -10,7 +10,7 @@ ARG APP_NAME=go-module
 ENV APP_NAME=${APP_NAME}
 
 RUN go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64  go build -o ${APP_NAME} .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ${APP_NAME} .
 
 FROM alpine
 
