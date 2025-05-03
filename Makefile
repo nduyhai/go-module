@@ -13,13 +13,18 @@ GOIMPORTS=goimports
 # Binary name
 BINARY_NAME=go-module
 
+## Docker
+DOCKER_IMAGE_NAME=$(BINARY_NAME)-app
+DOCKER_IMAGE_TAG=latest
+DOCKERFILE=Dockerfile
+
 # Build directory
 BUILD_DIR=build
 
 # Main package path
 MAIN_PACKAGE=.
 
-.PHONY: all build test clean lint deps help goimports
+.PHONY: all build test clean lint deps help goimports docker-build docker-run docker-clean
 
 all: test goimports fmt build
 
@@ -65,6 +70,20 @@ goimports:
 verify:
 	$(GOMOD) verify
 
+# Build Docker image
+docker-build:
+	@echo "Building Docker image with APP_NAME=$(BINARY_NAME)..."
+	docker build --build-arg APP_NAME=$(BINARY_NAME) -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f $(DOCKERFILE) .
+
+# Run Docker container
+docker-run:
+	@echo "Running Docker container..."
+	docker run --rm -p 8080:8080 $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
+
+# Remove Docker image
+docker-clean:
+	@echo "Removing Docker image..."
+	docker rmi $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) || true
 run:
 	$(GOCMD) run $(MAIN_PACKAGE)
 
@@ -82,4 +101,7 @@ help:
 	@echo "  fmt          - Format code"
 	@echo "  goimports    - Run goimports to format code and update imports"
 	@echo "  verify       - Verify dependencies"
+	@echo "  docker-build   - Build the Docker image"
+	@echo "  docker-run     - Run the Docker container"
+	@echo "  docker-clean   - Remove the Docker image"
 	@echo "  help         - Show this help"
