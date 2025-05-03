@@ -24,7 +24,7 @@ BUILD_DIR=build
 # Main package path
 MAIN_PACKAGE=.
 
-.PHONY: all build test clean lint deps help goimports docker-build docker-run docker-clean
+.PHONY: all build test clean lint deps help goimports docker-build docker-buildx docker-run docker-clean
 
 all: test goimports fmt build
 
@@ -75,6 +75,16 @@ docker-build:
 	@echo "Building Docker image with APP_NAME=$(BINARY_NAME)..."
 	docker build --build-arg APP_NAME=$(BINARY_NAME) -t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) -f $(DOCKERFILE) .
 
+docker-buildx:
+	@echo "Building multi-arch Docker image with APP_NAME=$(BINARY_NAME)..."
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		--build-arg APP_NAME=$(BINARY_NAME) \
+		-t $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG) \
+		-f $(DOCKERFILE) \
+		--load \
+		.
+
 # Run Docker container
 docker-run:
 	@echo "Running Docker container..."
@@ -102,6 +112,7 @@ help:
 	@echo "  goimports    - Run goimports to format code and update imports"
 	@echo "  verify       - Verify dependencies"
 	@echo "  docker-build   - Build the Docker image"
+	@echo "  docker-buildx  - Build the multi-arch Docker image"
 	@echo "  docker-run     - Run the Docker container"
 	@echo "  docker-clean   - Remove the Docker image"
 	@echo "  help         - Show this help"
